@@ -1,0 +1,13 @@
+linters:
+  rubocop:
+    display_cop_names: true
+  csslint:
+  stylelint:
+  eslint:
+    config: './eslint.config'  
+files:
+  ignore:
+    - 'dist/*'
+    - '.eslintrc.json'
+    - 'node_modules/*'
+    - 'style.css'
