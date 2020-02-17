@@ -17,32 +17,72 @@
 			</div>
 		</div>
 		<div class="level-item has-text-centered">
-			<div>
-				<p class="heading">Followers</p>
-				<p class="title"></p>
-			</div>
+			<div class="field has-addons">
+				<div class="control">
+					<input class="input" type="text" placeholder="city">
+				</div>
+				<div class="control">
+					<a class="button is-info">
+						Search
+					</a>
+				</div>
+				<div class="field">
+					<a class="button is-primary is-rounded">Rounded</a>
+				</div>
+			</div>			
 		</div>
+		
 		<div class="level-item has-text-centered">
 			<div>
-				<img id="localIcon" src="#">
-				<p class="heading" id="localTemp"></p>
+				<!-- <img id="localIcon" src="#">
+				<p class="heading" id="localTemp"></p> -->
 				<p id="date" class="date"><p>
 				<p class="title" id="localCity"></p>
 			</div>
 		</div>
 	</nav>
+	<section class="columns is-gapless">
+		<div class="column is-9">
+      <div class="card-container container" id="list">
+				
+				<div class="card">
+					<header class="card-header">
+						<div class="column has-text-centered">
+							<img id="localIcon" src="#">
+							<p class="heading" id="localTemp"></p>
+						</div>
+						<div class="column">
+							<div id="images"></div>
+						</div>												
+					</header>
+					<div class="card-content">
+						<div class="content">
+							<h4 is-4 class="text ${LINE}">Task Name</h4>
+							<p class="text ${LINE}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
+							<p class="text ${LINE}"><time datetime="2016-1-1">1 Jan 2016</time></p>
+							<p class="text ${LINE}">Due Date</p>
+							<p class="text ${LINE}">Priority</p>
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+	</section>
 </body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 <script>	
   const fetchCurrentCityName = (function() {
 		fetch('https://ipinfo.io?token=311875147c07c2', {mode: 'cors'})
-    .then(function(response) {
-      return response.json();
-    })
+    .then(response => response.json())
     .then(function(response) {
 			currentCity(response);
     })
     .catch(e => {
-			city.innerHTML = e;
+			localCity.innerHTML = e;
       console.log(e);
     })
 	})();
@@ -50,7 +90,7 @@
 	const currentCity = (data) => {
 		renderCityName(data.city);
 		fetchCurrentCityTemp(data.city);
-		googlePlace(data.city);						
+		// googlePlace(data.city);						
 	}
 
 	const renderCityName = (cityName) => {
@@ -65,9 +105,7 @@
 		const unit = 'metric';
 		const url = `${baseUrl}/weather?q=${location}&units=${unit}&APPID=${key}`;
 		fetch(url, {mode: 'cors'})
-    .then(function(response) {
-      return response.json();
-    })
+    .then((response => response.json()))
     .then(function(response) {
 			getLocalWeather(response);
     })
@@ -90,7 +128,7 @@
 
 	const renderLocalWeather = (img) => {
 		const localIcon = document.getElementById('localIcon');
-		let localLink = "https://openweathermap.org/img/w/" + img + ".png"
+		let localLink = "https://openweathermap.org/img/wn/" + img + "@2x.png"
 		localIcon.setAttribute("src", localLink)
 	}
 
@@ -101,24 +139,28 @@
 		dateElement.innerHTML = today.toLocaleDateString("en-US", format);
 	})();
 
-	const googlePlace = (cityName) => {
-		let location = cityName;		
-		const googleUrl = 'https://maps.googleapis.com/maps/api/place/textsearch';
-		const googleKey = 'AIzaSyD6IuIsf8pzDNh1VhJfAdxwjrecp4HacGY';
-		const targetUrl = `${googleUrl}/json?query=${location}&key=${googleKey}`;
-		fetch(targetUrl, {mode: 'no-cors'})
-    .then(function(response) {
-			console.log("WTF")
-      return response.json();
-    })
-    .then(function(response) {
-			
-			console.log(response.results[0].photos[0].photo_reference);
-    })
-    .catch(e => {
-      console.log(e);
-    })
-	}	
+	(function() {
+
+	//changed the callback so that it is defined
+	window.cb = function(data) {
+		console.log(data);
+		var $images = $('#images');
+		for(var i = 0; i < 1; i++) {
+			$('<img/>').attr('src', data.items[i].media.m).appendTo($images);
+		}
+	};
+
+	var tags = "yokohama";
+	var script = document.createElement('script');
+
+	script.src = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=" + tags;
+	document.head.appendChild(script);
+
+
+	})();
 
 </script>
 </html>
+
+
+
