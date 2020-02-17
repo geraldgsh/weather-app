@@ -19,10 +19,10 @@
 		<div class="level-item has-text-centered">
 			<div class="field has-addons">
 				<div class="control">
-					<input class="input" type="text" placeholder="city">
+					<input id="cityInput" class="input" type="text" placeholder="city">
 				</div>
 				<div class="control">
-					<a class="button is-info">
+					<a id="citySearch" class="button is-info">
 						Search
 					</a>
 				</div>
@@ -34,8 +34,8 @@
 		
 		<div class="level-item has-text-centered">
 			<div>
-				<!-- <img id="localIcon" src="#">
-				<p class="heading" id="localTemp"></p> -->
+				<img id="localIcon" src="#">
+				<p class="heading" id="localTemp"></p>
 				<p id="date" class="date"><p>
 				<p class="title" id="localCity"></p>
 			</div>
@@ -47,21 +47,23 @@
 				
 				<div class="card">
 					<header class="card-header">
-						<div class="column has-text-centered">
-							<img id="localIcon" src="#">
-							<p class="heading" id="localTemp"></p>
+						<div class="column has-text-centered left-col">
+							<img id="foreignIcon" src="#">
+							<p class="heading" id="foreignTemp"></p>
 						</div>
-						<div class="column">
-							<div id="images"></div>
+						<div class="column has-text-centered right-col">
+							<div id="cityImage">
+								<img id="cityPic">
+							</div>
 						</div>												
 					</header>
 					<div class="card-content">
 						<div class="content">
-							<h4 is-4 class="text ${LINE}">Task Name</h4>
-							<p class="text ${LINE}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
-							<p class="text ${LINE}"><time datetime="2016-1-1">1 Jan 2016</time></p>
-							<p class="text ${LINE}">Due Date</p>
-							<p class="text ${LINE}">Priority</p>
+							<h4 id="foreignCity" class="is-4" style="color: white;"></h4>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
+							<p><time datetime="2016-1-1">1 Jan 2016</time></p>
+							<p>Due Date</p>
+							<p>Priority</p>
 						</div>
 					</div>
 				</div>
@@ -69,7 +71,6 @@
     </div>
 	</section>
 </body>
-
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -89,8 +90,7 @@
 	
 	const currentCity = (data) => {
 		renderCityName(data.city);
-		fetchCurrentCityTemp(data.city);
-		// googlePlace(data.city);						
+		fetchCurrentCityTemp(data.city);				
 	}
 
 	const renderCityName = (cityName) => {
@@ -139,25 +139,87 @@
 		dateElement.innerHTML = today.toLocaleDateString("en-US", format);
 	})();
 
-	(function() {
+	
 
-	//changed the callback so that it is defined
-	window.cb = function(data) {
-		console.log(data);
-		var $images = $('#images');
-		for(var i = 0; i < 1; i++) {
-			$('<img/>').attr('src', data.items[i].media.m).appendTo($images);
-		}
+	document.addEventListener('DOMContentLoaded', () => {
+		document.getElementById('citySearch').addEventListener('click', findCity);
+	});
+
+	const findCity = () => {	
+		const cityInput = document.getElementById('cityInput').value;
+		fetchForeignCityWeather(cityInput);
 	};
 
-	var tags = "yokohama";
-	var script = document.createElement('script');
+	const fetchForeignCityWeather = (cityName) => {
+		let location = cityName;
+		const baseUrl = 'https://api.openweathermap.org/data/2.5';
+		const key = '05f63ad5080a502f607cfa5b1219794b';
+		const unit = 'metric';
+		const url = `${baseUrl}/weather?q=${location}&units=${unit}&APPID=${key}`;
+		fetch(url, {mode: 'cors'})
+		.then((response => response.json()))
+		.then(function(response) {
+			getForeignWeather(response);
+		})
+		.catch(e => {
+			alert("Invalid City")
+			console.log(e);
+		})
+	}
 
-	script.src = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=" + tags;
-	document.head.appendChild(script);
+	const getForeignWeather = (weather) => {
+		renderForeignCityName(weather.name);
+		renderForeignTemp(weather.main.temp);
+		let icon = weather.weather[0].icon;
+		renderForeignWeather(icon);
+		flickrImage(weather.name);
+		const clearSearch = document.getElementById('cityInput');
+		clearSearch.innerHTML = "";
+		renderForeignTime(weather.timezone);
+	}
 
+	const renderForeignCityName = (foreignCityName) => {
+		const foreignCity = document.getElementById('foreignCity')
+		foreignCity.innerHTML = foreignCityName;
+	}
 
-	})();
+	const renderForeignTemp = (foreignTemp) => {
+		const foreigntemp = document.getElementById('foreignTemp')
+		foreigntemp.innerHTML = "Local Temp: " + Math.floor(foreignTemp) + "°C";
+	}
+
+	const renderForeignWeather = (icon) => {
+		const foreignIcon = document.getElementById('foreignIcon');
+		let foreignLink = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+		foreignIcon.setAttribute("src", foreignLink)
+	}
+
+	const flickrImage = (foreignCityName) => {
+		//changed the callback so that it is defined
+		window.cb = function(data) {
+			console.log(data);
+			const image = document.getElementById('cityPic');
+			image.setAttribute('src', data.items[1].media.m);
+		};
+		const tags = foreignCityName;
+		const script = document.createElement('script');
+		script.src = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=" + tags;
+		document.head.appendChild(script);
+	};
+
+	const renderForeignTime = (foreignTime) => {
+		const localeTime = foreignTime/3600;
+		Date.prototype.addHours= function(localeTime){
+			this.setHours(this.getHours()+localeTime);
+			return this;
+		}
+		const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
+		const today = new Date().addHours(localeTime).toUTCString();
+		const newTime = new Date(today).getDate() + "/" + (new Date(today).getMonth() + 1) + " " 
+										+ new Date(today).getHours() + ":" + (new Date(today).getMinutes() < 10 ? '0':'') 
+										+ new Date(today).getMinutes() + (new Date(today).getHours() >= 12 ? "PM" : "AM");
+		console.log(newTime);
+	}
 
 </script>
 </html>
