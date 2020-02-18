@@ -9,7 +9,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
   <link href='style.css' rel='stylesheet'>
 </head>
-<body style="background-image: url(https://lh3.googleusercontent.com/p/AF1QipOWQOnc5H1KaoL3RA5dV1Vvn75adsXwlCG52KP_=s1600-w1600)">
+<body>
+
 	<nav class="level">
 		<div class="level-item has-text-centered">
 			<div>
@@ -27,7 +28,7 @@
 					</a>
 				</div>
 				<div class="field">
-					<a class="button is-primary is-rounded">Rounded</a>
+					<button id="unit" class="is-primary button is-rounded" onclick="toggle()">Celsius</button>
 				</div>
 			</div>			
 		</div>
@@ -35,12 +36,13 @@
 		<div class="level-item has-text-centered">
 			<div>
 				<img id="localIcon" src="#">
-				<p class="heading" id="localTemp"></p>
+				<p id="localTemp" class="heading"></p>
 				<p id="date" class="date"><p>
-				<p class="title" id="localCity"></p>
+				<p id="localCity" class="title"></p>
 			</div>
 		</div>
 	</nav>
+
 	<section class="columns is-gapless">
 		<div class="column is-9">
       <div class="card-container container" id="list">
@@ -89,22 +91,39 @@
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
-<script>	
-  const fetchCurrentCityName = (function() {
+<script>
+	function toggle() {
+		const btn = document.getElementById('unit');
+		if (btn.innerHTML == "Celsius") {
+			btn.innerHTML = "Fahrenheit";
+			unit = "imperial";
+			fetchCurrentCityName(unit);
+		} else {
+			btn.innerHTML = "Celsius";
+			unit = "metric";
+			fetchCurrentCityName(unit);
+		}
+	}	
+
+  const fetchCurrentCityName = (unit = "metric") => {
 		fetch('https://ipinfo.io?token=311875147c07c2', {mode: 'cors'})
     .then(response => response.json())
     .then(function(response) {
-			currentCity(response);
+			currentCity(response, unit);
     })
     .catch(e => {
 			localCity.innerHTML = e;
       console.log(e);
     })
+	};
+
+	(function() {
+		fetchCurrentCityName();
 	})();
 	
-	const currentCity = (data) => {
+	const currentCity = (data, unit) => {
 		renderCityName(data.city);
-		fetchCurrentCityTemp(data.city);				
+		fetchCurrentCityTemp(data.city, unit);				
 	}
 
 	const renderCityName = (cityName) => {
@@ -112,16 +131,16 @@
 		localCity.innerHTML = cityName;
 	}
 
-	const fetchCurrentCityTemp = (cityName) => {
+	const fetchCurrentCityTemp = (cityName, unit) => {
 		let location = cityName;
 		const baseUrl = 'https://api.openweathermap.org/data/2.5';
 		const key = '05f63ad5080a502f607cfa5b1219794b';
-		const unit = 'metric';
-		const url = `${baseUrl}/weather?q=${location}&units=${unit}&APPID=${key}`;
+		const value = unit;
+		const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
 		fetch(url, {mode: 'cors'})
     .then((response => response.json()))
     .then(function(response) {
-			getLocalWeather(response);
+			getLocalWeather(response, unit);
     })
     .catch(e => {
 			localTemp.innerHTML = e;
@@ -129,15 +148,19 @@
     })
 	}
 
-	const getLocalWeather = (weather) => {
-		renderLocalTemp(weather.main.temp);
+	const getLocalWeather = (weather, unit) => {
+		renderLocalTemp(weather.main.temp, unit);
 		let img = weather.weather[0].icon;
 		renderLocalWeather(img);
 	}
 
-	const renderLocalTemp = (temp) => {
+	const renderLocalTemp = (temp, unit) => {
 		const localTemp = document.getElementById('localTemp');
-		localTemp.innerHTML = "Local Temp: " + Math.floor(temp) + "°C";
+		if (unit === "metric") {			
+			localTemp.innerHTML = "Local Temp: " + Math.floor(temp) + "°C";
+		} else {
+			localTemp.innerHTML = "Local Temp: " + Math.floor(temp) + "°F";
+		}
 	}
 
 	const renderLocalWeather = (img) => {
@@ -152,130 +175,6 @@
 		const today = new Date();
 		dateElement.innerHTML = today.toLocaleDateString("en-US", format);
 	})();
-
-	
-
-	document.addEventListener('DOMContentLoaded', () => {
-		document.getElementById('citySearch').addEventListener('click', findCity);
-	});
-
-	const findCity = () => {	
-		const cityInput = document.getElementById('cityInput').value;
-		fetchForeignCityWeather(cityInput);
-	};
-
-	const fetchForeignCityWeather = (cityName) => {
-		let location = cityName;
-		const baseUrl = 'https://api.openweathermap.org/data/2.5';
-		const key = '05f63ad5080a502f607cfa5b1219794b';
-		const unit = 'metric';
-		const url = `${baseUrl}/weather?q=${location}&units=${unit}&APPID=${key}`;
-		fetch(url, {mode: 'cors'})
-		.then((response => response.json()))
-		.then(function(response) {
-			getForeignWeather(response);
-		})
-		.catch(e => {
-			alert("Invalid City")
-			console.log(e);
-		})
-	}
-
-	const getForeignWeather = (weather) => {
-		renderForeignCityName(weather.name);
-		renderForeignTemp(weather.main.temp);
-		let icon = weather.weather[0].icon;
-		renderForeignWeather(icon);
-		flickrImage(weather.name);
-		const clearSearch = document.getElementById('cityInput');
-		clearSearch.innerHTML = "";
-		renderForeignTime(weather.timezone);
-		const desc = weather.weather[0].description;
-		renderWeatherDescription(desc);
-		renderCardContent(weather);
-	}
-
-	const renderForeignCityName = (foreignCityName) => {
-		const foreignCity = document.getElementById('foreignCity')
-		foreignCity.innerHTML = foreignCityName;
-	}
-
-	const renderForeignTemp = (foreignTemp) => {
-		const foreigntemp = document.getElementById('foreignTemp')
-		foreigntemp.innerHTML = "Local Temp: " + Math.floor(foreignTemp) + "°C";
-	}
-
-	const renderForeignWeather = (icon) => {
-		const foreignIcon = document.getElementById('foreignIcon');
-		let foreignLink = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
-		foreignIcon.setAttribute("src", foreignLink)
-	}
-
-	const flickrImage = (foreignCityName) => {
-		//changed the callback so that it is defined
-		window.cb = function(data) {
-			console.log(data);
-			const image = document.getElementById('cityPic');
-			image.setAttribute('src', data.items[0].media.m);
-		};
-		const tags = foreignCityName;
-		const script = document.createElement('script');
-		script.src = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=" + tags;
-		document.head.appendChild(script);
-	};
-
-	const renderForeignTime = (foreignTiming) => {
-		const foreignTime = document.getElementById('foreignTime')
-		const date = new Date();
-		const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-		const timeOffset = foreignTiming/3600;
-		const format = {month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
-		const newTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleDateString("en-US", format);
-		foreignTime.innerHTML = newTime;
-	}
-
-	const renderWeatherDescription = (desc) => {
-		const weatherCondition = document.getElementById('weatherCondition');
-		weatherCondition.innerHTML = desc;
-	}
-
-	const sunTiming = (timeZone, sunTime) => {
-		const foreignTiming = timeZone;
-		const date = new Date(sunTime * 1000);
-		const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-		const timeOffset = foreignTiming/3600;
-		const format = {hour: 'numeric', minute: 'numeric'};
-		const sunnyTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString("en-US", format);
-		return sunnyTime;
-	} 
-
-	const renderCardContent = (details) => {
-		const foreignFeel = document.getElementById('foreignFeel');
-		foreignFeel.innerHTML = "Feels Like: " + Math.floor(details.main.feels_like) + "°C";
-		const foreignLow = document.getElementById('foreignLow');
-		foreignLow.innerHTML = "Min Temp: " + Math.floor(details.main.temp_min) + "°C";
-		const foreignHigh = document.getElementById('foreignHigh');
-		foreignHigh.innerHTML = "Max Temp: " + Math.floor(details.main.temp_max) + "°C";
-		const foreignPressure = document.getElementById('foreignPressure');
-		foreignPressure.innerHTML = "Pressure: " + details.main.pressure + " hPa";
-
-		const windSpeed = document.getElementById('windspeed');
-		windSpeed.innerHTML = 'Wind Speed: ' + details.wind.speed + "m/s"
-
-		const humidity = document.getElementById('humid');
-		humidity.innerHTML = "Humidity: " + details.main.humidity + "%";
-
-		const sunriseTime = sunTiming(details.timezone, details.sys.sunrise);		
-		const sunrise = document.getElementById('sunrise');
-		sunrise.innerHTML = 'Sunrise: ' + sunriseTime;
-
-		const sunSetTime = sunTiming(details.timezone, details.sys.sunset);		
-		const sunset = document.getElementById('sunset');
-		sunset.innerHTML = 'Sunset: ' + sunSetTime;
-
-		
-
-	}
 
 </script>
 </html>

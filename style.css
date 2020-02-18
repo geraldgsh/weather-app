@@ -2,17 +2,13 @@ html,
 body {
   /* font-family: 'Titillium Web', sans-serif; */
   min-height: 100vh;
-  background: no-repeat center center fixed; 
+  background: url(https://lh3.googleusercontent.com/p/AF1QipOWQOnc5H1KaoL3RA5dV1Vvn75adsXwlCG52KP_=s1600-w1600) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   color: white;
   text-shadow: 2px 2px black;
-}
-
-.text {
-  color: white;
 }
 
 .title {
@@ -55,8 +51,7 @@ body {
 
 #cityImage {
   padding:0;
-  margin:0; 
-  /* overflow: auto; */
+  margin:0;
   width: 218px;
   height: 150px;
 }
