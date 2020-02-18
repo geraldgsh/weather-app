@@ -49,6 +49,7 @@
 					<header class="card-header">
 						<div class="column has-text-centered left-col">
 							<img id="foreignIcon" src="#">
+							<p class="heading" id="weatherCondition"></p>
 							<p class="heading" id="foreignTemp"></p>
 						</div>
 						<div class="column has-text-centered right-col">
@@ -60,6 +61,7 @@
 					<div class="card-content">
 						<div class="content">
 							<h4 id="foreignCity" class="is-4" style="color: white;"></h4>
+							<p id="foreignTime"></p>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
 							<p><time datetime="2016-1-1">1 Jan 2016</time></p>
 							<p>Due Date</p>
@@ -134,7 +136,7 @@
 
 	const localTime = (function() {
 		const dateElement = document.getElementById("date");
-		const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric',};
+		const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
 		const today = new Date();
 		dateElement.innerHTML = today.toLocaleDateString("en-US", format);
 	})();
@@ -176,6 +178,8 @@
 		const clearSearch = document.getElementById('cityInput');
 		clearSearch.innerHTML = "";
 		renderForeignTime(weather.timezone);
+		const desc = weather.weather[0].description;
+		renderWeatherDescription(desc);
 	}
 
 	const renderForeignCityName = (foreignCityName) => {
@@ -199,7 +203,7 @@
 		window.cb = function(data) {
 			console.log(data);
 			const image = document.getElementById('cityPic');
-			image.setAttribute('src', data.items[1].media.m);
+			image.setAttribute('src', data.items[0].media.m);
 		};
 		const tags = foreignCityName;
 		const script = document.createElement('script');
@@ -207,18 +211,19 @@
 		document.head.appendChild(script);
 	};
 
-	const renderForeignTime = (foreignTime) => {
-		const localeTime = foreignTime/3600;
-		Date.prototype.addHours= function(localeTime){
-			this.setHours(this.getHours()+localeTime);
-			return this;
-		}
-		const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
-		const today = new Date().addHours(localeTime).toUTCString();
-		const newTime = new Date(today).getDate() + "/" + (new Date(today).getMonth() + 1) + " " 
-										+ new Date(today).getHours() + ":" + (new Date(today).getMinutes() < 10 ? '0':'') 
-										+ new Date(today).getMinutes() + (new Date(today).getHours() >= 12 ? "PM" : "AM");
-		console.log(newTime);
+	const renderForeignTime = (foreignTiming) => {
+		const foreignTime = document.getElementById('foreignTime')
+		const date = new Date();
+		const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+		const timeOffset = foreignTiming/3600;
+		const format = {month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
+		const newTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleDateString("en-US", format);
+		foreignTime.innerHTML = newTime;
+	}
+
+	const renderWeatherDescription = (desc) => {
+		const weatherCondition = document.getElementById('weatherCondition');
+		weatherCondition.innerHTML = desc;
 	}
 
 </script>
