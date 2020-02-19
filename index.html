@@ -28,7 +28,10 @@
 					</a>
 				</div>
 				<div class="field">
-					<button id="unit" class="is-primary button is-rounded" onclick="toggle()">Celsius</button>
+					<button id="unit" class="is-primary button is-rounded">Celsius</button>
+				</div>
+				<div class="field">
+					<button id="clearAll" class="is-danger button is-rounded">Clear All</button>
 				</div>
 			</div>			
 		</div>
@@ -47,7 +50,7 @@
 		<div class="column is-9">
       <div class="card-container container" id="list">
 				
-				<div class="card">
+				<!-- <div class="card">
 					<header class="card-header">
 						<div class="column has-text-centered left-col">
 							<img id="foreignIcon" src="#">
@@ -82,7 +85,7 @@
 							</div>							
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
     </div>
 	</section>
@@ -91,91 +94,7 @@
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
-<script>
-	function toggle() {
-		const btn = document.getElementById('unit');
-		if (btn.innerHTML == "Celsius") {
-			btn.innerHTML = "Fahrenheit";
-			unit = "imperial";
-			fetchCurrentCityName(unit);
-		} else {
-			btn.innerHTML = "Celsius";
-			unit = "metric";
-			fetchCurrentCityName(unit);
-		}
-	}	
-
-  const fetchCurrentCityName = (unit = "metric") => {
-		fetch('https://ipinfo.io?token=311875147c07c2', {mode: 'cors'})
-    .then(response => response.json())
-    .then(function(response) {
-			currentCity(response, unit);
-    })
-    .catch(e => {
-			localCity.innerHTML = e;
-      console.log(e);
-    })
-	};
-
-	(function() {
-		fetchCurrentCityName();
-	})();
-	
-	const currentCity = (data, unit) => {
-		renderCityName(data.city);
-		fetchCurrentCityTemp(data.city, unit);				
-	}
-
-	const renderCityName = (cityName) => {
-		const localCity = document.getElementById('localCity')
-		localCity.innerHTML = cityName;
-	}
-
-	const fetchCurrentCityTemp = (cityName, unit) => {
-		let location = cityName;
-		const baseUrl = 'https://api.openweathermap.org/data/2.5';
-		const key = '05f63ad5080a502f607cfa5b1219794b';
-		const value = unit;
-		const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
-		fetch(url, {mode: 'cors'})
-    .then((response => response.json()))
-    .then(function(response) {
-			getLocalWeather(response, unit);
-    })
-    .catch(e => {
-			localTemp.innerHTML = e;
-      console.log(e);
-    })
-	}
-
-	const getLocalWeather = (weather, unit) => {
-		renderLocalTemp(weather.main.temp, unit);
-		let img = weather.weather[0].icon;
-		renderLocalWeather(img);
-	}
-
-	const renderLocalTemp = (temp, unit) => {
-		const localTemp = document.getElementById('localTemp');
-		if (unit === "metric") {			
-			localTemp.innerHTML = "Local Temp: " + Math.floor(temp) + "°C";
-		} else {
-			localTemp.innerHTML = "Local Temp: " + Math.floor(temp) + "°F";
-		}
-	}
-
-	const renderLocalWeather = (img) => {
-		const localIcon = document.getElementById('localIcon');
-		let localLink = "https://openweathermap.org/img/wn/" + img + "@2x.png"
-		localIcon.setAttribute("src", localLink)
-	}
-
-	const localTime = (function() {
-		const dateElement = document.getElementById("date");
-		const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
-		const today = new Date();
-		dateElement.innerHTML = today.toLocaleDateString("en-US", format);
-	})();
-
+<script src="foreign.js"></script>
 </script>
 </html>
 
