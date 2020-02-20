@@ -17,25 +17,25 @@
 				<h3 class="title is-3">Weather APP</h3>
 			</div>
 		</div>
-		<div class="level-item has-text-centered">
-			<div class="field has-addons">
-				<div class="control">
-					<input id="cityInput" class="input" type="text" placeholder="city">
-				</div>
-				<div class="control">
-					<a id="citySearch" class="button is-info">
-						Search
-					</a>
-				</div>
+
+		<div class="level-item has-text-centered rows">
+			<div class="row">
+				<div class="field has-addons">
+					<div class="control">
+						<input id="cityInput" class="input" type="text" placeholder="city">
+					</div>
+					<div class="control">
+						<a id="citySearch" class="button is-info">
+							Search
+						</a>
+					</div>
+				</div>	
 				<div class="field">
 					<button id="unit" class="is-primary button is-rounded">Celsius</button>
-				</div>
-				<div class="field">
 					<button id="clearAll" class="is-danger button is-rounded">Clear All</button>
 				</div>
-			</div>			
-		</div>
-		
+			</div>
+		</div>	
 		<div class="level-item has-text-centered">
 			<div>
 				<img id="localIcon" src="#">
@@ -46,55 +46,16 @@
 		</div>
 	</nav>
 
-	<section class="columns is-gapless">
-		<div class="column is-9">
-      <div class="card-container container" id="list">
-				
-				<!-- <div class="card">
-					<header class="card-header">
-						<div class="column has-text-centered left-col">
-							<img id="foreignIcon" src="#">
-							<p class="heading" id="weatherCondition"></p>
-							<p class="heading" id="foreignTemp"></p>
-						</div>
-						<div class="column has-text-centered right-col">
-							<div id="cityImage">
-								<img id="cityPic">
-							</div>
-						</div>												
-					</header>
-					<div class="card-content">
-						<div class="content">
-							<h4 id="foreignCity" class="is-4" style="color: white;"></h4>
-							<p id="foreignTime"></p>
-							<div class="row">
-								<div class="columns">
-									<div class="column">
-										<p id="foreignFeel"></p>
-										<p id="foreignLow"></p>
-										<p id="foreignHigh"></p>
-										<p id="foreignPressure"></p>
-									</div>
-									<div class="column">
-										<p id="windspeed"></p>
-										<p id="humid"></p>
-										<p id="sunrise"></p>
-										<p id="sunset"></p>
-									</div>
-								</div>
-							</div>							
-						</div>
-					</div>
-				</div> -->
-			</div>
-    </div>
+	<section class="container">
+		<div class="card-container" id="list">
+		</div>
 	</section>
 </body>
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
-<script src="index-1.js"></script>
+<script src="index.js"></script>
 </script>
 </html>
 

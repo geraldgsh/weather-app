@@ -54,7 +54,7 @@ const renderCard = (weather, unit) => {
     <div class="card">
     <header class="card-header">
       <div class="column has-text-centered left-col">
-        <img id="foreignIcon" src="#">
+        <img id="foreignIcon" src="${weatherIcon}">
         <p class="heading" id="weatherCondition"></p>
         <p class="heading" id="foreignTemp"></p>
       </div>
