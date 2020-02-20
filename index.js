@@ -10,14 +10,14 @@ function toggle() {
   const btn = document.getElementById('unit');
   if (btn.innerHTML == "Celsius") {
     btn.innerHTML = "Fahrenheit";
-    unit = "imperial";
-    fetchCurrentCityName(unit);
+    unit = "imperial";    
     toggleRender(unit);
+    fetchCurrentCityName(unit);
   } else {
     btn.innerHTML = "Celsius";
     unit = "metric";
-    fetchCurrentCityName(unit);
     toggleRender(unit);
+    fetchCurrentCityName(unit);
   }
 }	
 
@@ -25,17 +25,13 @@ const fetchCurrentCityName = (unit = "metric") => {
   fetch('https://ipinfo.io?token=311875147c07c2', {mode: 'cors'})
  .then(response => response.json())
  .then(function(response) {
-    fetchLocalCityWeather(response.city, unit);
+  fetchLocalCityWeather(response.city, unit);
  })
  .catch(e => {
-    localCity.innerHTML = e;
-    console.log(e);
+  localCity.innerHTML = e;
+  console.log(e);
  })
 };
-
-(function() {
-  fetchCurrentCityName();
-})();
 
 const fetchLocalCityWeather = (cityName, unit) => {
   let location = cityName;
@@ -54,35 +50,51 @@ const fetchLocalCityWeather = (cityName, unit) => {
  })
 }
 
-const renderLocalCard = (weather, unit) => {
-  const localIcon = document.getElementById('localIcon');
-  const localTemp = document.getElementById('localTemp');
-  const dateElement = document.getElementById("date");
-  const localCity = document.getElementById('localCity')
-  
-  const icon = weather.weather[0].icon;
-    let localLink = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
-  localIcon.setAttribute("src", localLink)
+const getLocalIcon = (weatherLocal) => {
+  const icon = weatherLocal.weather[0].icon;
+  let localLink = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+  return localLink;
+}
 
+const getLocalTemp = (weatherLocal, unit) => {
   if (unit === "metric") {			
-    localTemp.innerHTML = "Local Temp: " + Math.floor(weather.main.temp) + "°C";
+    let localTemp = "Local Temp: " + Math.floor(weatherLocal.main.temp) + "°C";
+    return localTemp;
   } else {
-    localTemp.innerHTML = "Local Temp: " + Math.floor(weather.main.temp) + "°F";
+    let localTemp = "Local Temp: " + Math.floor(weatherLocal.main.temp) + "°F";
+    return localTemp;
   }
+}
 
+const getDateElement = () => {
   const format = {weekday:"long", month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
   const today = new Date();
-  dateElement.innerHTML = today.toLocaleDateString("en-US", format);
+  return dateElement = today.toLocaleDateString("en-US", format);
+}
 
-  localCity.innerHTML = weather.name;
+const renderLocalCard = (weather, unit) => {
+  const localIcon = getLocalIcon(weather); 
+  const localTemp = getLocalTemp(weather, unit);
+  const dateElement = getDateElement();
+  const localCity = weather.name
+  
+  const localWeather = document.getElementById('localWeather');
+
+  localWeather.innerHTML = `
+			<div>
+				<img id="localIcon" src="${localIcon}">
+				<p id="localTemp" class="heading">${localTemp}</p>
+				<p id="date" class="date">${dateElement}<p>
+				<p id="localCity" class="title">${localCity}</p>
+			</div>`
 }
 
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem('cityList', JSON.stringify(arr));
 }
 
-const findCity = (e) => {
-  e.preventDefault();
+const findCity = () => {
+  // e.preventDefault();
   const cityInput = document.getElementById('cityInput').value;
   if(cityList.some(city => city.name === cityInput)) {
     alert("Duplicate city!")
@@ -131,24 +143,26 @@ const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
     renderForeignCard(response, id, unit);
   })
   .catch(e => {
+    alert("Invalid City");
     console.log(e);
    })  
 }
 
-const checkCity = (cityName) => {
-  let location = cityName;
+const checkCity = (cityInput) => {
+  let location = cityInput;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
   const key = '05f63ad5080a502f607cfa5b1219794b';
-  const url = `${baseUrl}/weather?q=${location}&APPID=${key}`;
+  const value = 'metric';
+  const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
   fetch(url, {mode: 'cors'})
   .then((response => response.json()))
-  .then(function() {
-    addCityToList(cityName);
- })
- .catch(e => {
-    alert("Invalid City")
+  .then(function(response) {
+    addCityToList(response.name);
+  })
+  .catch(e => {
+    alert("Invalid City");
     console.log(e);
- })
+  })
 }
 
 const getForeignWeatherIcon = (icon) => {
@@ -310,6 +324,10 @@ const purge = (function() {
     localStorage.clear();
     window.location.reload();
   })
+})();
+
+(function() {
+  fetchCurrentCityName();
 })();
 
 (function() {  
