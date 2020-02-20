@@ -62,3 +62,9 @@ body {
   max-height: 100%;
   object-fit: contain;
 }
+
+@media only screen and (max-width: 768px) {
+  #localWeather {
+    display: none;
+  }
+}
