@@ -16,7 +16,7 @@ const updateLocalStorage = (arr) => {
   window.localStorage.setItem('cityList', JSON.stringify(arr));
 };
 
-const foreignCelciusTemp = (mainTemp, id) => {
+const foreignCelsiusTemp = (mainTemp, id) => {
   const ele = `foreignTemp${id}`;
   const foreignTemp = document.getElementById(ele);
   foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°C`;
@@ -28,7 +28,7 @@ const foreignFahrenheitTemp = (mainTemp, id) => {
   foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°F`;
 };
 
-const foreignCelciusFeel = (feel, id) => {
+const foreignCelsiusFeel = (feel, id) => {
   const ele = `foreignFeel${id}`;
   const foreignFeel = document.getElementById(ele);
   foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°C`;
@@ -40,7 +40,7 @@ const foreignFahrenheitFeel = (feel, id) => {
   foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°F`;
 };
 
-const foreignCelciusMin = (min, id) => {
+const foreignCelsiusMin = (min, id) => {
   const ele = `foreignLow${id}`;
   const foreignLow = document.getElementById(ele);
   foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°C`;
@@ -52,7 +52,7 @@ const foreignFahrenheitMin = (min, id) => {
   foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°F`;
 };
 
-const foreignCelciusMax = (max, id) => {
+const foreignCelsiusMax = (max, id) => {
   const ele = `foreignHigh${id}`;
   const foreignHigh = document.getElementById(ele);
   foreignHigh.innerHTML = `Max Temp: ${Math.floor(max)}°C`;
@@ -169,10 +169,10 @@ const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
       } = response;
       renderForeignCard(description, icon, pressure, humidity, speed, timezone, name, id);
       if (unit === 'metric') {
-        foreignCelciusTemp(response.main.temp, id);
-        foreignCelciusFeel(response.main.feels_like, id);
-        foreignCelciusMin(response.main.temp_min, id);
-        foreignCelciusMax(response.main.temp_max, id);
+        foreignCelsiusTemp(response.main.temp, id);
+        foreignCelsiusFeel(response.main.feels_like, id);
+        foreignCelsiusMin(response.main.temp_min, id);
+        foreignCelsiusMax(response.main.temp_max, id);
       } else {
         foreignFahrenheitTemp(response.main.temp, id);
         foreignFahrenheitFeel(response.main.feels_like, id);
