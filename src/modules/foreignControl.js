@@ -1,200 +1,250 @@
-export const findCity = (e) => {
-  e.preventDefault();
-  const cityInput = document.getElementById('cityInput').value;
-  if(cityList.some(city => city.name === cityInput)) {
-    alert("Duplicate city!")
-  } else {
-    checkCity(cityInput);
-  }
+/* eslint-disable linebreak-style */
+/* eslint-disable no-undef */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
+
+const cityList = [];
+function City(name, id) {
+  this.name = name;
+  this.id = id;
+}
+
+const updateLocalStorage = (arr) => {
+  window.localStorage.setItem('cityList', JSON.stringify(arr));
 };
 
-export const addCityToList = (cityName) => {
-  if(cityList.some(city => city.name === cityName)) {
-  } else {
-    id = cityList.length;
-    const newCity = new City(cityName, id);
-    cityList.push(newCity);
-    updateLocalStorage(cityList);
-    fetchForeignCityWeather(cityName, id, unit = 'metric');      
-  }  
-}
+const foreignCelciusTemp = (mainTemp, id) => {
+  const ele = `foreignTemp${id}`;
+  const foreignTemp = document.getElementById(ele);
+  foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°C`;
+};
 
-export const toggleRender = (unit) => {
-	const cityList = JSON.parse(localStorage.getItem("cityList"))
-	const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
-	async function asyncForEach(array, callback) {
-	  for (let index = 0; index < array.length; index++) {
-	    await callback(array[index], index, array);
-	  }
-	}
-	const init = async () => {
-	  await asyncForEach(cityList, async (city) => {
-	    await waitFor(900);
-	    fetchForeignCityWeather(city.name, city.id, unit);
-	  });
-  }
-  init();
-}
+const foreignFahrenheitTemp = (mainTemp, id) => {
+  const ele = `foreignTemp${id}`;
+  const foreignTemp = document.getElementById(ele);
+  foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°F`;
+};
 
-export const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
-  let location = cityName;
-  const baseUrl = 'https://api.openweathermap.org/data/2.5';
-  const key = '05f63ad5080a502f607cfa5b1219794b';
-  const value = unit;
-  const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
-  fetch(url, {mode: 'cors'})
-  .then((response => response.json()))
-  .then(function(response) {  
-    renderForeignCard(response, id, unit);
-  })
-  .catch(e => {
-    alert("Invalid City");
-    console.log(e);
-   })  
-}
+const foreignCelciusFeel = (feel, id) => {
+  const ele = `foreignFeel${id}`;
+  const foreignFeel = document.getElementById(ele);
+  foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°C`;
+};
 
-export const checkCity = (cityInput) => {
-  let location = cityInput;
-  const baseUrl = 'https://api.openweathermap.org/data/2.5';
-  const key = '05f63ad5080a502f607cfa5b1219794b';
-  const value = 'metric';
-  const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
-  fetch(url, {mode: 'cors'})
-  .then((response => response.json()))
-  .then(function(response) {
-    addCityToList(response.name);
-  })
-  .catch(e => {
-    alert("Invalid City");
-    console.log(e);
-  })
-}
+const foreignFahrenheitFeel = (feel, id) => {
+  const ele = `foreignFeel${id}`;
+  const foreignFeel = document.getElementById(ele);
+  foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°F`;
+};
 
-export const getForeignWeatherIcon = (icon) => {
-  let foreignLink = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
-  return foreignLink;
-}
+const foreignCelciusMin = (min, id) => {
+  const ele = `foreignLow${id}`;
+  const foreignLow = document.getElementById(ele);
+  foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°C`;
+};
 
-export const getForeignTemp = (temp, unit) => {
-  if (unit == 'metric') {
-    const mainTemp = "Local Temp: " + Math.floor(temp) + "°C";
-    return mainTemp;
-  } else {
-    const mainTemp = "Local Temp: " + Math.floor(temp) + "°F";
-    return mainTemp;
-  };
-}
+const foreignFahrenheitMin = (min, id) => {
+  const ele = `foreignLow${id}`;
+  const foreignLow = document.getElementById(ele);
+  foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°F`;
+};
 
-export const getflickrImg = (foreignCityName, id) => {
+const foreignCelciusMax = (max, id) => {
+  const ele = `foreignHigh${id}`;
+  const foreignHigh = document.getElementById(ele);
+  foreignHigh.innerHTML = `Max Temp: ${Math.floor(max)}°C`;
+};
+
+const foreignFahrenheitMax = (max, id) => {
+  const ele = `foreignHigh${id}`;
+  const foreignLow = document.getElementById(ele);
+  foreignLow.innerHTML = `Max Temp: ${Math.floor(max)}°F`;
+};
+
+const getflickrImg = (foreignCityName, id) => {
   const tags = foreignCityName;
   const script = document.createElement('script');
-  script.src = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=" + tags;
-  document.head.appendChild(script)
-  let photoID = id; 
-  window.cb = function(data) {    
-    console.log(data);
-    console.warn(photoID);
-    let ele = 'cityPic' + photoID    
+  script.src = `http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=${tags}`;
+  document.head.appendChild(script);
+  const photoID = id;
+  window.cb = function cb(data) {
+    const ele = `cityPic${photoID}`;
     const image = document.getElementById(ele);
     image.setAttribute('src', data.items[0].media.m);
   };
 };
 
-export const getForeignTime = (foreignTiming) => {
+const getSunrise = (timezone, sunrise, id) => {
+  const foreignTiming = timezone;
+  const date = new Date(sunrise * 1000);
+  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+  const timeOffset = foreignTiming / 3600;
+  const format = { hour: 'numeric', minute: 'numeric' };
+  const ele = `sunrise${id}`;
+  const sunriseTime = document.getElementById(ele);
+  sunriseTime.innerHTML = `Sunrise: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
+};
+
+const getSunset = (timezone, sunset, id) => {
+  const foreignTiming = timezone;
+  const date = new Date(sunset * 1000);
+  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+  const timeOffset = foreignTiming / 3600;
+  const format = { hour: 'numeric', minute: 'numeric' };
+  const ele = `sunset${id}`;
+  const sunsetTime = document.getElementById(ele);
+  sunsetTime.innerHTML = `Sunset: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
+};
+
+const renderForeignCard = (description, foreignIcon, foreignPressure,
+  humidity, windSpeed, timezone, name, id) => {
   const date = new Date();
   const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const timeOffset = foreignTiming/3600;
-  const format = {month:"short", day:"numeric", hour: 'numeric', minute: 'numeric'};
-  const newTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleDateString("en-US", format);
-  return newTime;
-}
+  const timeOffset = timezone / 3600;
+  const format = {
+    month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
+  };
+  const foreignTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleDateString('en-US', format);
+  const list = document.getElementById('list');
+  const item = `
+    <div class='card'>
+      <header class='card-header'>
+        <div class='column has-text-centered left-col'>
+          <img id='foreignIcon' src='https://openweathermap.org/img/wn/${foreignIcon}@2x.png'>
+          <p class='heading' id='weatherCondition'>${description}</p>
+          <p class='heading' id='foreignTemp${id}'></p>
+        </div>
+        <div class='column has-text-centered right-col'>
+          <div id='cityImage'>
+            <img id='cityPic${id}'>
+          </div>
+        </div>
+      </header>
+      <div class='card-content'>
+        <div class='content'>
+          <h4 id='foreignCity' class='is-4' style='color: white;'>${name}</h4>
+          <p id='foreignTime'>${foreignTime}</p>
+          <div class='row'>
+            <div class='columns'>
+              <div class='column'>
+                <p id='foreignFeel${id}'></p>
+                <p id='foreignLow${id}'></p>
+                <p id='foreignHigh${id}'></p>
+                <p id='foreignPressure'>Pressure: ${foreignPressure}hPa</p>
+              </div>
+              <div class='column'>
+                <p id='windSpeed'>Wind Speed: ${windSpeed}m/s</p>
+                <p id='humidity'>Humidity: ${humidity}%</p>
+                <p id='sunrise${id}'></p>
+                <p id='sunset${id}'></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  const position = 'beforeend';
+  list.insertAdjacentHTML(position, item);
+};
 
-export const getForeignFeel = (feel, unit) => {
-  if (unit == 'metric') {
-    const feelLike = "Feels Like: " + Math.floor(feel) + "°C";
-    return feelLike;
-  } else {
-    const feelLike = "Feels Like: " + Math.floor(feel) + "°F";    
-    return feelLike;
+const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
+  const location = cityName;
+  const baseUrl = 'https://api.openweathermap.org/data/2.5';
+  const key = '05f63ad5080a502f607cfa5b1219794b';
+  const value = unit;
+  const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
+  fetch(url, { mode: 'cors' })
+    .then(((response) => response.json()))
+    .then((response) => {
+      const {
+        weather: [{ description, icon }],
+        main: { pressure, humidity },
+        wind: { speed },
+        sys: { sunrise, sunset },
+        timezone,
+        name,
+      } = response;
+      renderForeignCard(description, icon, pressure, humidity, speed, timezone, name, id);
+      if (unit === 'metric') {
+        foreignCelciusTemp(response.main.temp, id);
+        foreignCelciusFeel(response.main.feels_like, id);
+        foreignCelciusMin(response.main.temp_min, id);
+        foreignCelciusMax(response.main.temp_max, id);
+      } else {
+        foreignFahrenheitTemp(response.main.temp, id);
+        foreignFahrenheitFeel(response.main.feels_like, id);
+        foreignFahrenheitMin(response.main.temp_min, id);
+        foreignFahrenheitMax(response.main.temp_max, id);
+      }
+      getflickrImg(name, id);
+      getSunrise(timezone, sunrise, id);
+      getSunset(timezone, sunset, id);
+    })
+    .catch((error) => console.log(error));
+};
+
+const toggleRender = (unit) => {
+  const cityListing = JSON.parse(localStorage.getItem('cityList'));
+  const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
+  async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      // eslint-disable-next-line no-await-in-loop
+      await callback(array[index], index, array);
+    }
   }
-}
+  const init = async () => {
+    await asyncForEach(cityListing, async (city) => {
+      await waitFor(900);
+      fetchForeignCityWeather(city.name, city.id, unit);
+    });
+  };
+  init();
+};
 
-export const getForeignLow = (low, unit) => {
-  if (unit == 'metric') {
-    const tempMin = "Min Temp: " + Math.floor(low) + "°C";
-    return tempMin;
+const addCityToList = (cityName) => {
+  if (cityList.some((city) => city.name === cityName)) {
+    alert('Duplicate city!');
   } else {
-    const tempMin = "Min Temp: " + Math.floor(low) + "°F";    
-    return tempMin;
+    const id = cityList.length;
+    const newCity = new City(cityName, id);
+    cityList.push(newCity);
+    updateLocalStorage(cityList);
+    fetchForeignCityWeather(cityName, id, unit = 'metric');
   }
-}
+};
 
-export const getForeignHigh = (high, unit) => {
-  if (unit == 'metric') {
-    const tempMax = "Max Temp: " + Math.floor(high) + "°C";
-    return tempMax;
+const checkCity = (cityInput) => {
+  const location = cityInput;
+  const baseUrl = 'https://api.openweathermap.org/data/2.5';
+  const key = '05f63ad5080a502f607cfa5b1219794b';
+  const url = `${baseUrl}/weather?q=${location}&APPID=${key}`;
+  fetch(url, { mode: 'cors' })
+    .then((response) => response.json())
+    .then((response) => {
+      addCityToList(response.name);
+    })
+    .catch((error) => {
+      alert('Invalid city');
+      console.log(error);
+    });
+};
+
+const findCity = () => {
+  const cityInput = document.getElementById('cityInput').value;
+  if (cityList.some((city) => city.name === cityInput)) {
+    alert('Duplicate city!');
   } else {
-    const tempMax = "Max Temp: " + Math.floor(high) + "°F";    
-    return tempMax;
+    checkCity(cityInput);
   }
-}
+};
 
-export const getSunTiming = (timeZone, sunTime) => {
-  const foreignTiming = timeZone;
-  const date = new Date(sunTime * 1000);
-  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const timeOffset = foreignTiming/3600;
-  const format = {hour: 'numeric', minute: 'numeric'};
-  const sunnyTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString("en-US", format);
-  return sunnyTime;
-}
-
-let cityList = [];
-function City(name, id) {
-  this.name = name;
-  this.id = id;  
-}
-
-function toggle() {
-  const clear = document.getElementById('list');
-  clear.innerHTML = '';
-  const btn = document.getElementById('unit');
-  if (btn.innerHTML == "Celsius") {
-    btn.innerHTML = "Fahrenheit";
-    unit = "imperial";    
-    toggleRender(unit);
-    fetchCurrentCityName(unit);
-  } else {
-    btn.innerHTML = "Celsius";
-    unit = "metric";
-    toggleRender(unit);
-    fetchLocalCityName(unit);
-  }
-}	
-
-const updateLocalStorage = (arr) => {
-  window.localStorage.setItem('cityList', JSON.stringify(arr));
-}
-
-const citySearch = (function(){
+const citySearch = (() => {
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('citySearch').addEventListener('click', findCity);
   });
 })();
 
-const toggleTime = (function(){
-  const unit =  document.getElementById('unit');
-  unit.addEventListener("click", toggle);
-})();
-
-const purge = (function() {
-  const clearAll =  document.getElementById('clearAll');
-  clearAll.addEventListener("click", function() {
-    localStorage.clear();
-    window.location.reload();
-  })
-})();
-
-(function() {  
-  toggleRender();
-})();
+export { toggleRender };
