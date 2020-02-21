@@ -7,7 +7,7 @@ import { toggleRender } from './modules/foreignControl.js';
 const start = () => {
   fetchLocalCityName();
   toggleRender();
-}
+};
 start();
 
 function toggle() {
