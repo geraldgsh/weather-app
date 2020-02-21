@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
+
 import { fetchLocalCityName } from './modules/localControl.js';
 import { toggleRender } from './modules/foreignControl.js';
 

@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
-/* eslint-disable linebreak-style */
 
 const localCelcius = (tempLocal) => {
   const celsiusTemp = document.getElementById('localTemp');

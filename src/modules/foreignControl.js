@@ -1,10 +1,10 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable no-alert */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-console */
 
 const cityList = [];
 function City(name, id) {
@@ -183,7 +183,7 @@ const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
       getSunrise(timezone, sunrise, id);
       getSunset(timezone, sunset, id);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.warn(error));
 };
 
 const toggleRender = (unit) => {
