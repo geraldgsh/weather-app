@@ -191,7 +191,7 @@ const toggleRender = (unit) => {
     }
   }
   if (cityListing === null) {
-    console.log('nah');
+    console.log('List is empty');
   } else {
     const init = async () => {
       await asyncForEach(cityListing, async (city) => {
@@ -204,7 +204,6 @@ const toggleRender = (unit) => {
 };
 
 const addCityToList = (cityName, unit) => {
-  console.warn(unit);
   if (cityList.some((city) => city.name === cityName)) {
     alert('Duplicate city!');
   } else {
@@ -217,7 +216,6 @@ const addCityToList = (cityName, unit) => {
 };
 
 const checkCity = (cityInput, unit) => {
-  console.warn(unit);
   const location = cityInput;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
   const key = '05f63ad5080a502f607cfa5b1219794b';
