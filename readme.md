@@ -30,37 +30,37 @@ You should change the look of the page based on the data, maybe by changing the 
   <link href='style.css' rel='stylesheet'>
 </head>
 <body>
-	<nav id="level" class="level">
-		<div class="level-item has-text-centered">
-			<div>
-				<h3 class="title is-3">Weather APP</h3>
-			</div>
-		</div>
-		<div class="level-item has-text-centered rows">
-			<div class="row">
-				<div class="field has-addons">
-					<div class="control">
-						<input id="cityInput" class="input" type="text" placeholder="city">
-					</div>
-					<div class="control">
-						<a id="citySearch" class="button is-info">
-							Search
-						</a>
-					</div>
-				</div>	
-				<div class="field">
-					<button id="unit" class="is-primary button is-rounded">Celsius</button>
-					<button id="clearAll" class="is-danger button is-rounded">Clear All</button>
-				</div>
-			</div>
-		</div>	
-		<div id="localWeather" class="level-item has-text-centered">
-		</div>
-	</nav>
-	<section class="container">
-		<div class="card-container" id="list">
-		</div>
-	</section>
+  <nav id="level" class="level">
+    <div class="level-item has-text-centered">
+      <div>
+        <h3 class="title is-3">Weather APP</h3>
+      </div>
+    </div>
+    <div class="level-item has-text-centered rows">
+      <div class="row">
+        <div class="field has-addons">
+          <div class="control">
+            <input id="cityInput" class="input" type="text" placeholder="city">
+          </div>
+          <div class="control">
+            <a id="citySearch" class="button is-info">
+              Search
+            </a>
+          </div>
+        </div>	
+        <div class="field">
+          <button id="unit" class="is-primary button is-rounded">Celsius</button>
+          <button id="clearAll" class="is-danger button is-rounded">Clear All</button>
+        </div>
+      </div>
+    </div>	
+    <div id="localWeather" class="level-item has-text-centered">
+    </div>
+  </nav>
+  <section class="container">
+    <div class="card-container" id="list">
+    </div>
+  </section>
 </body>
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
