@@ -45,8 +45,6 @@ const start = () => {
 };
 start();
 
-console.warn(unit);
-
 const findCity = () => {
   const cityInput = document.getElementById('cityInput').value;
   if (cityList.some((city) => city.name === cityInput)) {
