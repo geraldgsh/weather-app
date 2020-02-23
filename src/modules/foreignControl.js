@@ -205,6 +205,7 @@ const toggleRender = (unit) => {
 };
 
 const addCityToList = (cityName) => {
+  const unit = 'metric';
   if (cityList.some((city) => city.name === cityName)) {
     alert('Duplicate city!');
   } else {
@@ -212,7 +213,7 @@ const addCityToList = (cityName) => {
     const newCity = new City(cityName, id);
     cityList.push(newCity);
     updateLocalStorage(cityList);
-    fetchForeignCityWeather(cityName, id, unit = 'metric');
+    fetchForeignCityWeather(cityName, id, unit);
   }
 };
 
