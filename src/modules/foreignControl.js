@@ -5,12 +5,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
-
-const cityList = [];
-function City(name, id) {
-  this.name = name;
-  this.id = id;
-}
+import { cityList, City } from './constructor';
 
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem('cityList', JSON.stringify(arr));
@@ -150,7 +145,7 @@ const renderForeignCard = (description, foreignIcon, foreignPressure,
   list.insertAdjacentHTML(position, item);
 };
 
-const fetchForeignCityWeather = (cityName, id, unit = 'metric') => {
+const fetchForeignCityWeather = (cityName, id, unit) => {
   const location = cityName;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
   const key = '05f63ad5080a502f607cfa5b1219794b';
@@ -195,17 +190,21 @@ const toggleRender = (unit) => {
       await callback(array[index], index, array);
     }
   }
-  const init = async () => {
-    await asyncForEach(cityListing, async (city) => {
-      await waitFor(900);
-      fetchForeignCityWeather(city.name, city.id, unit);
-    });
-  };
-  init();
+  if (cityListing === null) {
+    console.log('nah');
+  } else {
+    const init = async () => {
+      await asyncForEach(cityListing, async (city) => {
+        await waitFor(900);
+        fetchForeignCityWeather(city.name, city.id, unit);
+      });
+    };
+    init();
+  }
 };
 
-const addCityToList = (cityName) => {
-  const unit = 'metric';
+const addCityToList = (cityName, unit) => {
+  console.warn(unit);
   if (cityList.some((city) => city.name === cityName)) {
     alert('Duplicate city!');
   } else {
@@ -217,7 +216,8 @@ const addCityToList = (cityName) => {
   }
 };
 
-const checkCity = (cityInput) => {
+const checkCity = (cityInput, unit) => {
+  console.warn(unit);
   const location = cityInput;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
   const key = '05f63ad5080a502f607cfa5b1219794b';
@@ -225,13 +225,14 @@ const checkCity = (cityInput) => {
   fetch(url, { mode: 'cors' })
     .then((response) => response.json())
     .then((response) => {
-      addCityToList(response.name);
+      addCityToList(response.name, unit);
     })
     .catch((error) => {
       alert('Invalid city');
       console.log(error);
     });
 };
+
 
 const findCity = () => {
   const cityInput = document.getElementById('cityInput').value;

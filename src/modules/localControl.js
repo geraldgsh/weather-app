@@ -2,7 +2,13 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
 
-const localCelcius = (tempLocal) => {
+const cityEntry = [];
+function CurrentCity(city, unit) {
+  this.city = city;
+  this.unit = unit;
+}
+
+const localCelsius = (tempLocal) => {
   const celsiusTemp = document.getElementById('localTemp');
   celsiusTemp.innerHTML = `Local Temp: ${Math.floor(tempLocal)}°C`;
 };
@@ -43,7 +49,7 @@ const fetchLocalCityWeather = (cityName, unit) => {
       } = response;
       renderLocalCard(name, icon);
       if (unit === 'metric') {
-        localCelcius(response.main.temp);
+        localCelsius(response.main.temp);
       } else {
         localFahrenheit(response.main.temp);
       }
@@ -51,13 +57,32 @@ const fetchLocalCityWeather = (cityName, unit) => {
     .catch((error) => console.log(error));
 };
 
-const fetchLocalCityName = (unit = 'metric') => {
+const singleRender = (unit) => {
+  const cityEntry = JSON.parse(localStorage.getItem('cityEntry'));
+  cityEntry.forEach((city) => {
+    fetchLocalCityWeather(city.city, unit);
+  });
+};
+
+const updateLocalStorage = (arr) => {
+  window.localStorage.setItem('cityEntry', JSON.stringify(arr));
+};
+
+const addCurrentCity = (city, unit) => {
+  const newCity = new CurrentCity(city);
+  cityEntry.push(newCity);
+  updateLocalStorage(cityEntry);
+  singleRender(unit);
+};
+
+const fetchLocalCityName = (unit) => {
   fetch('https://ipinfo.io?token=311875147c07c2', { mode: 'cors' })
     .then((response) => response.json())
     .then((response) => {
-      fetchLocalCityWeather(response.city, unit);
+      addCurrentCity(response.city, unit);
     })
     .catch((error) => console.log(error));
 };
 
-export { fetchLocalCityName };
+
+export { singleRender, fetchLocalCityName };
