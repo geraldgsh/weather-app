@@ -1,9 +1,11 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
 
 import { singleRender, fetchLocalCityName } from './modules/localControl.js';
-import { toggleRender } from './modules/foreignControl.js';
+import { toggleRender, checkCity } from './modules/foreignControl.js';
+import { cityList } from './modules/constructor.js';
 
 const unit = 'metric';
 
@@ -42,3 +44,20 @@ const start = () => {
   toggleRender(unit);
 };
 start();
+
+console.warn(unit);
+
+const findCity = () => {
+  const cityInput = document.getElementById('cityInput').value;
+  if (cityList.some((city) => city.name === cityInput)) {
+    alert('Duplicate city!');
+  } else {
+    checkCity(cityInput, unit);
+  }
+};
+
+const citySearch = (() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('citySearch').addEventListener('click', findCity);
+  });
+})();

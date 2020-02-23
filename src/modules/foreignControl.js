@@ -233,20 +233,4 @@ const checkCity = (cityInput, unit) => {
     });
 };
 
-
-const findCity = () => {
-  const cityInput = document.getElementById('cityInput').value;
-  if (cityList.some((city) => city.name === cityInput)) {
-    alert('Duplicate city!');
-  } else {
-    checkCity(cityInput);
-  }
-};
-
-const citySearch = (() => {
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('citySearch').addEventListener('click', findCity);
-  });
-})();
-
-export { toggleRender };
+export { toggleRender, checkCity };
