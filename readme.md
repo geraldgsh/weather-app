@@ -332,7 +332,7 @@ Successfully created .eslintrc.json file in
 ESLint was installed locally. We recommend using this local copy instead of your globally-installed copy.
 ```
 
-with the following setup.
+with the following setup;
 
 `? How would you like to use ESLint?` To check syntax, find problems, and enforce code style
 
