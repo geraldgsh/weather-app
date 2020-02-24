@@ -473,7 +473,7 @@ This is a weather app built with Bulma, Webpack, Bootstrap, JS, CSS & HTML.
 Checkout our [wikipage](https://github.com/geraldgsh/weather-app/wiki) for more details. 
 
 #### Live Demo
-[Demo]()
+[Demo](https://rawcdn.githack.com/geraldgsh/weather-app/64d18f01c9e4f1bfda310899c965565f47bcba4b/dist/index.html)
 
 #### Getting Started
 Clone repo and run index.html
