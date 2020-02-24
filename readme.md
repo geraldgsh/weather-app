@@ -4,7 +4,7 @@ Javascript
 
 ### Snapshot
 
-![](https://github.com/geraldgsh/weather-app/blob/feature/img/screenshot.JPG)
+![](https://github.com/geraldgsh/weather-app/blob/feature/img/ami.screenshot.JPG)
 
 ### Introduction.
 The Weather App project comes at the end of the Asynchronous Javascript and APIs section of the Javascript course. It tests the knowledge of the student about asynchronous communication with promises or async/await and when to use them.
