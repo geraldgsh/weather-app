@@ -62,7 +62,7 @@ const foreignFahrenheitMax = (max, id) => {
 const getflickrImg = (foreignCityName, id) => {
   const tags = foreignCityName;
   const script = document.createElement('script');
-  script.src = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=${tags}';
+  script.src = `https://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=${tags}`;
   document.head.appendChild(script);
   const photoID = id;
   window.cb = function cb(data) {
