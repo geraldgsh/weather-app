@@ -360,6 +360,24 @@ eslint script.js
 
 #### Setup Webpack watch
 
+Install webpack;
+
+```sh
+$ npm install webpack webpack-cli --save-dev
+npm WARN rollback Rolling back readable-stream@2.3.6 failed (this is probably harmless): EINVAL: invalid argument, lstat '/mnt/d/Google_Drive/Microverse/5.Javascript/4.oop/todo-list/node_modules/fsevents/node_modules'
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.11 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.11: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
++ webpack@4.41.6
++ webpack-cli@3.3.11
+added 360 packages from 209 contributors, removed 10 packages and audited 5675 packages in 20.445s
+
+20 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+```
+
 Now we'll create the following directory structure, files and their contents:
 
 Create;
@@ -401,9 +419,9 @@ Webpack can watch files and recompile whenever they change. Turn on watch mode. 
 ./package.json
 
 {
-  "name": "restaurant-page",
+  "name": "weather-app",
   "version": "1.0.0",
-  "description": "Restaurant Page",
+  "description": "Weather APP",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --mode development",
