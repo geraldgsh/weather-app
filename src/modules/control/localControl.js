@@ -1,36 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
+import { renderLocalCard, localCelsius, localFahrenheit } from '../DOM/localDOM';
+import { cityEntry, CurrentCity } from '../constructor/localConstructor';
 
-const cityEntry = [];
-function CurrentCity(city, unit) {
-  this.city = city;
-  this.unit = unit;
-}
-
-const localCelsius = (tempLocal) => {
-  const celsiusTemp = document.getElementById('localTemp');
-  celsiusTemp.innerHTML = `Local Temp: ${Math.floor(tempLocal)}°C`;
-};
-
-const localFahrenheit = (tempLocal) => {
-  const fahrenheitTemp = document.getElementById('localTemp');
-  fahrenheitTemp.innerHTML = `Local Temp: ${Math.floor(tempLocal)}°F`;
-};
-
-const renderLocalCard = (localCity, localIcon) => {
-  const format = {
-    weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
-  };
-  const today = new Date();
-  const dateElement = today.toLocaleDateString('en-US', format);
-  const localWeather = document.getElementById('localWeather');
-  localWeather.innerHTML = `
-    <div>        
-      <img id='localIcon' src='https://openweathermap.org/img/wn/${localIcon}@2x.png'>
-      <p id='localTemp' class='heading'></p>
-      <p id='date' class='date'>${dateElement}<p>
-      <p id='localCity' class='title'>${localCity}</p>
-    </div>`;
+const updateLocalStorage = (arr) => {
+  window.localStorage.setItem('cityEntry', JSON.stringify(arr));
 };
 
 const fetchLocalCityWeather = (cityName, unit) => {
@@ -53,7 +26,7 @@ const fetchLocalCityWeather = (cityName, unit) => {
         localFahrenheit(response.main.temp);
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error(error));
 };
 
 const singleRender = (unit) => {
@@ -61,10 +34,6 @@ const singleRender = (unit) => {
   cityEntry.forEach((city) => {
     fetchLocalCityWeather(city.city, unit);
   });
-};
-
-const updateLocalStorage = (arr) => {
-  window.localStorage.setItem('cityEntry', JSON.stringify(arr));
 };
 
 const addCurrentCity = (city, unit) => {
@@ -82,6 +51,5 @@ const fetchLocalCityName = (unit) => {
     })
     .catch((error) => console.log(error));
 };
-
 
 export { singleRender, fetchLocalCityName };

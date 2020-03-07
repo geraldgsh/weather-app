@@ -1,9 +1,8 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
 
-import { singleRender, fetchLocalCityName } from './modules/localControl.js';
+import { singleRender, fetchLocalCityName } from './modules/control/localControl.js';
 import { toggleRender, checkCity } from './modules/foreignControl.js';
 import { cityList } from './modules/constructor.js';
 
