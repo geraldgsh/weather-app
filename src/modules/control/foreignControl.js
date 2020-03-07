@@ -13,51 +13,19 @@ import {
   foreignFahrenheitMin,
   foreignCelsiusMax,
   foreignFahrenheitMax,
+  getSunrise,
+  getSunset,
+  getflickrImg,
 } from '../DOM/foreignDOM';
 
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem('cityList', JSON.stringify(arr));
 };
 
-const getflickrImg = (foreignCityName, id) => {
-  const tags = foreignCityName;
-  const script = document.createElement('script');
-  script.src = `https://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=${tags}`;
-  document.head.appendChild(script);
-  const photoID = id;
-  window.cb = function cb(data) {
-    const ele = `cityPic${photoID}`;
-    const image = document.getElementById(ele);
-    image.setAttribute('src', data.items[0].media.m);
-  };
-};
-
-const getSunrise = (timezone, sunrise, id) => {
-  const foreignTiming = timezone;
-  const date = new Date(sunrise * 1000);
-  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const timeOffset = foreignTiming / 3600;
-  const format = { hour: 'numeric', minute: 'numeric' };
-  const ele = `sunrise${id}`;
-  const sunriseTime = document.getElementById(ele);
-  sunriseTime.innerHTML = `Sunrise: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
-};
-
-const getSunset = (timezone, sunset, id) => {
-  const foreignTiming = timezone;
-  const date = new Date(sunset * 1000);
-  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const timeOffset = foreignTiming / 3600;
-  const format = { hour: 'numeric', minute: 'numeric' };
-  const ele = `sunset${id}`;
-  const sunsetTime = document.getElementById(ele);
-  sunsetTime.innerHTML = `Sunset: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
-};
-
 const fetchForeignCityWeather = (cityName, id, unit) => {
   const location = cityName;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
-  const key = '05f63ad5080a502f607cfa5b1219794b';
+  const key = process.env.OPENKEY;
   const value = unit;
   const url = `${baseUrl}/weather?q=${location}&units=${value}&APPID=${key}`;
   fetch(url, { mode: 'cors' })
@@ -127,7 +95,7 @@ const addCityToList = (cityName, unit) => {
 const checkCity = (cityInput, unit) => {
   const location = cityInput;
   const baseUrl = 'https://api.openweathermap.org/data/2.5';
-  const key = '05f63ad5080a502f607cfa5b1219794b';
+  const key = process.env.OPENKEY;
   const url = `${baseUrl}/weather?q=${location}&APPID=${key}`;
   fetch(url, { mode: 'cors' })
     .then((response) => response.json())

@@ -96,3 +96,38 @@ export const foreignFahrenheitMax = (max, id) => {
   const foreignLow = document.getElementById(ele);
   foreignLow.innerHTML = `Max Temp: ${Math.floor(max)}°F`;
 };
+
+export const getSunrise = (timezone, sunrise, id) => {
+  const foreignTiming = timezone;
+  const date = new Date(sunrise * 1000);
+  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+  const timeOffset = foreignTiming / 3600;
+  const format = { hour: 'numeric', minute: 'numeric' };
+  const ele = `sunrise${id}`;
+  const sunriseTime = document.getElementById(ele);
+  sunriseTime.innerHTML = `Sunrise: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
+};
+
+export const getSunset = (timezone, sunset, id) => {
+  const foreignTiming = timezone;
+  const date = new Date(sunset * 1000);
+  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
+  const timeOffset = foreignTiming / 3600;
+  const format = { hour: 'numeric', minute: 'numeric' };
+  const ele = `sunset${id}`;
+  const sunsetTime = document.getElementById(ele);
+  sunsetTime.innerHTML = `Sunset: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
+};
+
+export const getflickrImg = (foreignCityName, id) => {
+  const tags = foreignCityName;
+  const script = document.createElement('script');
+  script.src = `https://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=cb&tags=${tags}`;
+  document.head.appendChild(script);
+  const photoID = id;
+  window.cb = function cb(data) {
+    const ele = `cityPic${photoID}`;
+    const image = document.getElementById(ele);
+    image.setAttribute('src', data.items[0].media.m);
+  };
+};

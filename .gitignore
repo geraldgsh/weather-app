@@ -1,9 +1,11 @@
 # Dependency directories
 /node_modules
 */node_modules
+.env
 
 # lerna files
 /lerna-debug.log
 
 # Lock files
 *desktop.ini
+.env
