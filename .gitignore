@@ -6,6 +6,4 @@
 /lerna-debug.log
 
 # Lock files
-/package-lock.json
-/yarn.lock
 *desktop.ini
