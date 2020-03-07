@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
 

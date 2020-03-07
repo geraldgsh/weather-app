@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
