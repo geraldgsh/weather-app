@@ -1,61 +1,22 @@
-/* eslint-disable no-undef */
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
-import { cityList, City } from './constructor';
+
+import { cityList, City } from '../constructor/foreignConstructor';
+import {
+  renderForeignCard,
+  foreignCelsiusTemp,
+  foreignFahrenheitTemp,
+  foreignCelsiusFeel,
+  foreignFahrenheitFeel,
+  foreignCelsiusMin,
+  foreignFahrenheitMin,
+  foreignCelsiusMax,
+  foreignFahrenheitMax,
+} from '../DOM/foreignDOM';
 
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem('cityList', JSON.stringify(arr));
-};
-
-const foreignCelsiusTemp = (mainTemp, id) => {
-  const ele = `foreignTemp${id}`;
-  const foreignTemp = document.getElementById(ele);
-  foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°C`;
-};
-
-const foreignFahrenheitTemp = (mainTemp, id) => {
-  const ele = `foreignTemp${id}`;
-  const foreignTemp = document.getElementById(ele);
-  foreignTemp.innerHTML = `Local Temp: ${Math.floor(mainTemp)}°F`;
-};
-
-const foreignCelsiusFeel = (feel, id) => {
-  const ele = `foreignFeel${id}`;
-  const foreignFeel = document.getElementById(ele);
-  foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°C`;
-};
-
-const foreignFahrenheitFeel = (feel, id) => {
-  const ele = `foreignFeel${id}`;
-  const foreignFeel = document.getElementById(ele);
-  foreignFeel.innerHTML = `Feels Like: ${Math.floor(feel)}°F`;
-};
-
-const foreignCelsiusMin = (min, id) => {
-  const ele = `foreignLow${id}`;
-  const foreignLow = document.getElementById(ele);
-  foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°C`;
-};
-
-const foreignFahrenheitMin = (min, id) => {
-  const ele = `foreignLow${id}`;
-  const foreignLow = document.getElementById(ele);
-  foreignLow.innerHTML = `Min Temp: ${Math.floor(min)}°F`;
-};
-
-const foreignCelsiusMax = (max, id) => {
-  const ele = `foreignHigh${id}`;
-  const foreignHigh = document.getElementById(ele);
-  foreignHigh.innerHTML = `Max Temp: ${Math.floor(max)}°C`;
-};
-
-const foreignFahrenheitMax = (max, id) => {
-  const ele = `foreignHigh${id}`;
-  const foreignLow = document.getElementById(ele);
-  foreignLow.innerHTML = `Max Temp: ${Math.floor(max)}°F`;
 };
 
 const getflickrImg = (foreignCityName, id) => {
@@ -91,57 +52,6 @@ const getSunset = (timezone, sunset, id) => {
   const ele = `sunset${id}`;
   const sunsetTime = document.getElementById(ele);
   sunsetTime.innerHTML = `Sunset: ${new Date(utcTime + (3600000 * timeOffset)).toLocaleTimeString('en-US', format)}`;
-};
-
-const renderForeignCard = (description, foreignIcon, foreignPressure,
-  humidity, windSpeed, timezone, name, id) => {
-  const date = new Date();
-  const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const timeOffset = timezone / 3600;
-  const format = {
-    month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric',
-  };
-  const foreignTime = new Date(utcTime + (3600000 * timeOffset)).toLocaleDateString('en-US', format);
-  const list = document.getElementById('list');
-  const item = `
-    <div class='card'>
-      <header class='card-header'>
-        <div class='column has-text-centered left-col'>
-          <img id='foreignIcon' src='https://openweathermap.org/img/wn/${foreignIcon}@2x.png'>
-          <p class='heading' id='weatherCondition'>${description}</p>
-          <p class='heading' id='foreignTemp${id}'></p>
-        </div>
-        <div class='column has-text-centered right-col'>
-          <div id='cityImage'>
-            <img id='cityPic${id}'>
-          </div>
-        </div>
-      </header>
-      <div class='card-content'>
-        <div class='content'>
-          <h4 id='foreignCity' class='is-4' style='color: white;'>${name}</h4>
-          <p id='foreignTime'>${foreignTime}</p>
-          <div class='row'>
-            <div class='columns'>
-              <div class='column'>
-                <p id='foreignFeel${id}'></p>
-                <p id='foreignLow${id}'></p>
-                <p id='foreignHigh${id}'></p>
-                <p id='foreignPressure'>Pressure: ${foreignPressure}hPa</p>
-              </div>
-              <div class='column'>
-                <p id='windSpeed'>Wind Speed: ${windSpeed}m/s</p>
-                <p id='humidity'>Humidity: ${humidity}%</p>
-                <p id='sunrise${id}'></p>
-                <p id='sunset${id}'></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  const position = 'beforeend';
-  list.insertAdjacentHTML(position, item);
 };
 
 const fetchForeignCityWeather = (cityName, id, unit) => {

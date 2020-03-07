@@ -3,8 +3,8 @@
 /* eslint-disable import/extensions */
 
 import { singleRender, fetchLocalCityName } from './modules/control/localControl.js';
-import { toggleRender, checkCity } from './modules/foreignControl.js';
-import { cityList } from './modules/constructor.js';
+import { toggleRender, checkCity } from './modules/control/foreignControl.js';
+import { cityList } from './modules/constructor/foreignConstructor';
 
 const unit = 'metric';
 
