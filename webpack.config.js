@@ -1,5 +1,6 @@
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   plugins: [
@@ -28,4 +29,15 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'index.html'),
+        to: path.resolve(__dirname, 'build')
+      }
+    ])
+  ],s
 };

@@ -537,7 +537,7 @@ Checkout our [wikipage](https://github.com/geraldgsh/weather-app/wiki) for more 
 [Demo](https://rawcdn.githack.com/geraldgsh/weather-app/64d18f01c9e4f1bfda310899c965565f47bcba4b/dist/index.html)
 
 #### Getting Started
-Clone repo and run index.html
+Clone repo and open index.html with your favorite browser.
 
 #### Prerequisites
 Web browser like Chrome, Mozilla or similar.
@@ -548,6 +548,9 @@ https://www.theodinproject.com/courses/javascript/lessons/weather-app
 ### Github Repo
 https://github.com/geraldgsh/weather-app
 
+### Future feature
+1. Add delete button for individual weather card
+2. Get a google place local image on page background using API for local weather
 
 👤 **Author**
 
